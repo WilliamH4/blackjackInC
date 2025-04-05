@@ -171,8 +171,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     int  screenHeight=GetSystemMetrics(SM_CYSCREEN);
     //printf("Received message: uMsg = %u, wParam = %lu, lParam = %ld\n", uMsg, wParam, lParam);
 
-    //printf("numcards:%d\n",getNumCards(Deck,1)); // do not un comment for some resion it bricks it
-
     if (Deck==NULL){
         printf("makeing deck\n");
         Deck=(int*)malloc(52*numDecks*sizeof(int));
@@ -187,7 +185,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     switch (uMsg) {
 
     case WM_CREATE:
-    printf("created\n");
+        printf("created\n");
 
         srand(time(NULL));
         printf("Loading images...\n");
@@ -280,7 +278,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             if (playerTurn){
                 DisplayHitOptions(hdc,screenWidth,screenHeight);
             }else if (DealerTurn&&(getTotal(DealerHand)<17)){
-                GiveHandCard(Deck,DealerHand);
+                GiveHandCard(Deck,DealerHand,numDecks);
                 Sleep(500);
                 InvalidateRect(hwnd,NULL,TRUE);
             }else if(getTotal(DealerHand)>=17){
@@ -297,7 +295,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                     }
                 }
                 Sleep(200);
-                printf("numcards:%d\n",getNumCards(Deck,1));
+                printf("numcards:%d\n",getNumCards(Deck,numDecks));
                 //printDeck(Deck);
                 Delt=0;
                 DealerTurn=0;
@@ -364,11 +362,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 }
                 GetingBet=0;
                 //reshuffles if we are runing out of cards
+                printf("num cards at deal:%d%s%d\n",getNumCards(Deck,numDecks),"\nroot devision by num decks:",getNumCards(Deck,numDecks)-(52*(numDecks-1)));
                 if (getNumCards(Deck,numDecks)<10){
                     Deck=makeDeck(numDecks);
                 }
-                DealHand(playerHand,Deck);
-                DealHand(DealerHand,Deck);
+                DealHand(playerHand,Deck,numDecks);
+                DealHand(DealerHand,Deck,numDecks);
                 // playerHand[0]=0;
                 // playerHand[1]=12;
                 if (getTotal(playerHand)==21){
@@ -389,7 +388,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
         if(Delt){
             if ((wParam==49||wParam==97)&&playerTurn){
-                GiveHandCard(Deck,playerHand);
+                GiveHandCard(Deck,playerHand,numDecks);
                 InvalidateRect(hwnd, NULL, TRUE);
                 if(getTotal(playerHand)>21){
                     playerTurn=0;
