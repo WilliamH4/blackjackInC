@@ -332,6 +332,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         //printf("wParam = %d\n", wParam);
 
         if(((((wParam<58&&wParam>48)||(wParam<105&&wParam>97))||wParam==VK_RETURN)||wParam==48)&&GetingBet){//cheking if one of the button keys is pressing
+	    
             if (wParam==49||wParam==97){//one key actions
                 currentBet+=5;
             }else if (wParam==50||wParam==98){//two key actions
@@ -454,10 +455,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }    
 
     printf("validrun:%d\n",ValidRun());
-    if (!ValidRun()){
-        MessageBox(NULL, "this file is older then one month \nplease get new exe from will at \nwilliam.horning4@gmail.com", "Invalid file run", MB_OK | MB_ICONERROR);
-        return 0;
-    }
+    // if (!ValidRun()){
+    //     MessageBox(NULL, "this file is older then one month \nplease get new exe from will at \nwilliam.horning4@gmail.com", "Invalid file run", MB_OK | MB_ICONERROR);
+    //     return 0;
+    // }
     ShowWindow(hwnd, nCmdShow);
 
     MSG msg = { };
